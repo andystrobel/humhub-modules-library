@@ -1,0 +1,11 @@
+{
+    "id": "library",
+    "name": "Library",
+    "description": "Adds a library to spaces or user profiles.",
+    "keywords": ["user", "space", "document", "link", "library", "directory"],
+    "version": "0.1.0",
+    "humhub": {
+        "minVersion": "0.8.0"
+    },
+    "screenshots": ["assets/screen1.jpg", "assets/screen2.jpg", "assets/screen3.jpg", "assets/screen4.jpg"]
+}
