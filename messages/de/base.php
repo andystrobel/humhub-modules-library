@@ -17,7 +17,6 @@
  * NOTE, this file must be saved in UTF-8 encoding.
  */
 return array (
-  'No public categories have been added to any space library yet.' => 'Bisher gibt es leider noch keine öffentlichen Kategorien in Bibliotheken.',
   '<strong>Confirm</strong> category deleting' => '<strong>Bestätigen</strong> Sie das Löschen der Kategorie',
   '<strong>Confirm</strong> item deleting' => '<strong>Bestätigen</strong> Sie das Löschen des Eintrags',
   '<strong>Create</strong> new category' => '<strong>Kategorie</strong> hinzufügen',
@@ -62,6 +61,7 @@ return array (
   'Library configuration' => 'Konfiguration der Bibliothek',
   'LibraryCategory' => 'BibliotheksKategorie',
   'Link' => 'Link',
+  'No public categories have been added to any space library yet.' => 'Bisher gibt es leider noch keine öffentlichen Kategorien in Bibliotheken.',
   'Only publishers/admins can add items to any category.' => 'Nur Veröffentlicher/Admins können Einträge in Kategorien hinzufügen.',
   'Quick' => 'Schnell',
   'Save' => 'Speichern',
