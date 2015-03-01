@@ -17,14 +17,15 @@
  * NOTE, this file must be saved in UTF-8 encoding.
  */
 return array (
+  'No public categories have been added to any space library yet.' => 'Bisher gibt es leider noch keine öffentlichen Kategorien in Bibliotheken.',
+  '<strong>Confirm</strong> category deleting' => '<strong>Bestätigen</strong> Sie das Löschen der Kategorie',
+  '<strong>Confirm</strong> item deleting' => '<strong>Bestätigen</strong> Sie das Löschen des Eintrags',
   '<strong>Create</strong> new category' => '<strong>Kategorie</strong> hinzufügen',
   '<strong>Create</strong> new document' => '<strong>Dokument</strong> hinzufügen',
   '<strong>Create</strong> new link' => '<strong>Link</strong> hinzufügen',
   '<strong>Edit</strong> category' => '<strong>Kategorie</strong> bearbeiten',
   '<strong>Edit</strong> document' => '<strong>Dokument</strong> bearbeiten',
   '<strong>Edit</strong> link' => '<strong>Link</strong> bearbeiten',
-  '<strong>Confirm</strong> category deleting' => '<strong>Bestätigen</strong> Sie das Löschen der Kategorie',
-  '<strong>Confirm</strong> item deleting' => '<strong>Bestätigen</strong> Sie das Löschen des Eintrags',
   '<strong>Public</strong> libraries' => '<strong>Öffentliche</strong> Bibliotheken',
   'A disclaimer will be added to the public library.' => 'In der öffentlichen Bibliothek wird ein Nutzungshinweis angezeigt.',
   'A public library will be added to the top menu. It contains all public library categories from all spaces.' => 'Im Hauptmenü wird eine öffentliche Bibliothek hinzugefügt. Sie enthält alle öffentlichen Kategorien aller Spaces.',
