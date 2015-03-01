@@ -9,7 +9,7 @@
 
 class LibraryController extends ContentContainerController
 {
-	/** access level of the user currently logged in. 0 -> no write access / 1 -> create documents and edit own documents / 2 -> full write access. **/	
+	/** access level of the user currently logged in. 0 -> no write access / 1 -> create documents and edit own documents / 2 -> full write access. **/
 	public $accessLevel = 0;
 	/** url parameter name for the guid. space -> sguid / user -> uguid. **/
 	public $guidParamName = '';
@@ -17,7 +17,7 @@ class LibraryController extends ContentContainerController
 	public $libraryUrl = '';
 	/** the url back to the modules, used in the config view. **/
 	public $modulesUrl = '';
-	
+
 	public function behaviors() {
 		return array(
 				'HReorderContentBehavior' => array(
@@ -25,7 +25,7 @@ class LibraryController extends ContentContainerController
 				)
 		);
 	}
-	
+
 	/**
 	 * @return array action filters
 	 */
@@ -34,7 +34,7 @@ class LibraryController extends ContentContainerController
 				'accessControl', // perform access control for CRUD operations -> redirect to login if access denied
 		);
 	}
-	
+
 	/**
 	 * Specifies the access control rules.
 	 * This method is used by the 'accessControl' filter.
@@ -50,7 +50,7 @@ class LibraryController extends ContentContainerController
 				),
 		);
 	}
-	
+
 	/**
 	 * Automatically loads the underlying contentContainer (User/Space) by using
 	 * the uguid/sguid request parameter
@@ -58,14 +58,14 @@ class LibraryController extends ContentContainerController
 	 * @return boolean
 	 */
 	public function init() {
-		$retVal = parent::init(); 
-		$this->accessLevel = $this->getAccessLevel(); 
+		$retVal = parent::init();
+		$this->accessLevel = $this->getAccessLevel();
 		$this->guidParamName = $this->getGuidParamName();
 		$this->libraryUrl = $this->getLibraryUrl();
 		$this->modulesUrl = $this->getModulesUrl();
 		return $retVal;
 	}
-	
+
 	/**
 	 * Get the access level to the library of the currently logged in user.
 	 * @return number 0 -> no write access / 1 -> create in non-public categories and edit own documents / 2 -> full write access / 3 -> share/publish only
@@ -80,7 +80,7 @@ class LibraryController extends ContentContainerController
 			else return 1;
 		}
 	}
-	
+
 	/**
 	 * Get the url back to the library, used in the edit document and edit category view.
 	 * @return string
@@ -119,7 +119,7 @@ class LibraryController extends ContentContainerController
 			return "application.modules_core.space.views.space._layout";
 		}
 	}
-	
+
 	/**
 	 * Get the url parameter name for the guid.
 	 * @return string space -> sguid / user -> uguid
@@ -132,7 +132,7 @@ class LibraryController extends ContentContainerController
 			return 'sguid';
 		}
 	}
-	
+
 	/**
 	 * Cleans up documents without files and with multiple files attached.
 	 */
@@ -151,20 +151,20 @@ class LibraryController extends ContentContainerController
 			}
 		}
 	}
-	
+
 	/**
 	 * Action that renders the list view.
 	 * @see views/library/showLibrary.php
 	 */
 	public function actionShowLibrary() {
-		
+
 		$this->checkContainerAccess();
 		$publishersOnly = $this->contentContainer->getSetting('publishersOnly', 'library');
 		$categoryBuffer = LibraryCategory::model()->contentContainer($this->contentContainer)->findAll(array('order' => 'sort_order ASC'));
-		
+
 		$categories = array();
 		$items = array();
-			
+
 		foreach($categoryBuffer as $category) {
 			$categories[] = $category;
 			// Clean up documents without files and with multiple files attached.
@@ -173,7 +173,7 @@ class LibraryController extends ContentContainerController
 			// TODO: Fix the ugly mess with multiple uploaded files.
 			$items[$category->id] = LibraryItem::model()->findAllByAttributes(array('category_id'=>$category->id), array('order' => 'sort_order ASC'));
 		}
-		
+
 		$this->render('showLibrary', array(
 			$this->guidParamName => $this->contentContainer->guid,
 			'categories' => $categories,
@@ -182,7 +182,7 @@ class LibraryController extends ContentContainerController
 			'accessLevel' => $this->accessLevel,
 		));
 	}
-	
+
 	/**
 	 * Action that renders the view to add or edit a category.<br />
 	 * The request has to provide the id of the category to edit in the url parameter 'category_id'.
@@ -190,22 +190,22 @@ class LibraryController extends ContentContainerController
 	 * @throws CHttpException 404, if the logged in User misses the rights to access this view.
 	 */
 	public function actionEditCategory() {
-		
+
 		$this->checkContainerAccess();
-		
+
 		if ($this->accessLevel != 2) {
-			throw new CHttpException(404, Yii::t('LibraryModule.base', 'You miss the rights to edit this category!'));
+			throw new CHttpException(404, Yii::t('LibraryModule.exception', 'You miss the rights to edit this category!'));
 		}
-	
+
 		$category_id = (int) Yii::app()->request->getQuery('category_id');
 		$category = LibraryCategory::model()->findByAttributes(array('id' => $category_id));
 		$isCreated = false;
-	
+
 		if ($category == null) {
 			$category = new LibraryCategory;
 			$isCreated = true;
-		}	
-	
+		}
+
 		if (isset($_POST['LibraryCategory'])) {
 			$_POST = Yii::app()->input->stripClean($_POST);
 			$category->attributes = $_POST['LibraryCategory'];
@@ -221,42 +221,42 @@ class LibraryController extends ContentContainerController
 				$this->redirect(Yii::app()->createUrl('library/library/showlibrary', array($this->guidParamName => $this->contentContainer->guid)));
 			}
 		}
-	
+
 		$this->render('editCategory', array(
 			$this->guidParamName => $this->contentContainer->guid,
 			'category' => $category,
 			'isCreated' => $isCreated,
 		));
 	}
-	
+
 	/**
 	 * Action that deletes a given category.<br />
-	 * The request has to provide the id of the category to delete in the url parameter 'category_id'. 
+	 * The request has to provide the id of the category to delete in the url parameter 'category_id'.
 	 * @throws CHttpException 404, if the logged in User misses the rights to access this view.
 	 */
 	public function actionDeleteCategory() {
-		
+
 		$this->checkContainerAccess();
-		
+
 		if ($this->accessLevel != 2) {
-			throw new CHttpException(404, Yii::t('LibraryModule.base', 'You miss the rights to delete this category!'));
+			throw new CHttpException(404, Yii::t('LibraryModule.exception', 'You miss the rights to delete this category!'));
 		}
-	
+
 		$category_id = (int) Yii::app()->request->getQuery('category_id');
 		$category = LibraryCategory::model()->findByAttributes(array('id' => $category_id));
-	
+
 		if ($category == null) {
-			throw new CHttpException(404, Yii::t('LibraryModule.base', 'Requested category could not be found.'));
+			throw new CHttpException(404, Yii::t('LibraryModule.exception', 'Requested category could not be found.'));
 		}
-	
+
 		$category->delete();
-	
+
 		$this->redirect(Yii::app()->createUrl('library/library/showlibrary', array (
 			$this->guidParamName => $this->contentContainer->guid,
 			)
 		));
 	}
-	
+
 	/**
 	 * Action that renders the view to edit an item.<br />
 	 * The request has to provide the id of the category the document should be created in, in the url parameter 'category_id'.<br />
@@ -265,30 +265,30 @@ class LibraryController extends ContentContainerController
 	 * @throws CHttpException 404, if the logged in User misses the rights to access this view.
 	 */
 	public function actionEditItem() {
-		
+
 		$this->checkContainerAccess();
-		
+
 		$item_id = (int) Yii::app()->request->getQuery('item_id');
 		$category_id = (int) Yii::app()->request->getQuery('category_id');
 		$item = LibraryItem::model()->findByAttributes(array('id' => $item_id));
 		$category = LibraryCategory::model()->findByAttributes(array('id' => $category_id));
 		$isCreated = false;
-		
+
 		$publicCategory = $category->content->isPublic();
-		
+
 		// access level 0 may neither create nor edit
 		if($this->accessLevel == 0) {
-			throw new CHttpException(404, Yii::t('LibraryModule.base', 'You miss the rights to add/edit items!'));
+			throw new CHttpException(404, Yii::t('LibraryModule.exception', 'You miss the rights to add/edit items!'));
 		}
 		// item has to exist
 		else if ($item == null) {
-			throw new CHttpException(404, Yii::t('LibraryModule.base', 'The item you want to edit could not be found!'));
+			throw new CHttpException(404, Yii::t('LibraryModule.exception', 'The item you want to edit could not be found!'));
 		}
 		// access level 1 may edit own non-public items, 2 and 3 all documents
 		else if($this->accessLevel == 1 && ($item->content->visiblity == '1' || $item->content->created_by != Yii::app()->user->id)) {
-			throw new CHttpException(404, Yii::t('LibraryModule.base', 'You miss the rights to edit this document!'));
+			throw new CHttpException(404, Yii::t('LibraryModule.exception', 'You miss the rights to edit this document!'));
 		}
-		
+
 		// if form content is sent back, validate and save
 		if (isset($_POST['LibraryDocument']) || isset($_POST['LibraryLink'])) {
 			$_POST = Yii::app()->input->stripClean($_POST);
@@ -309,7 +309,7 @@ class LibraryController extends ContentContainerController
 				$this->redirect(Yii::app()->createUrl('library/library/showlibrary', array ($this->guidParamName => $this->contentContainer->guid)));
 			}
 		}
-		
+
 		// If the item is a document, render document edit form
 		if (get_class($item) == 'LibraryDocument') {
 			$this->render('editDocument', array(
@@ -339,33 +339,33 @@ class LibraryController extends ContentContainerController
 	 * @throws CHttpException 404, if the logged in User misses the rights to access this view.
 	 */
 	public function actionAddDocument() {
-		
+
 		$this->checkContainerAccess();
-		
+
 		$category_id = (int) Yii::app()->request->getQuery('category_id');
 		$category = LibraryCategory::model()->findByAttributes(array('id' => $category_id));
 		$publicCategory = $category->content->isPublic();
 		$isCreated = false;
 		$lastfile = '';
-		
+
 		// access level 0 may neither create nor edit
 		if($this->accessLevel == 0) {
-			throw new CHttpException(404, Yii::t('LibraryModule.base', 'You miss the rights to add documents!'));
+			throw new CHttpException(404, Yii::t('LibraryModule.exception', 'You miss the rights to add documents!'));
 		}
 		// access level 1 + 2 + 3 may create (level 1 only in non-public categories...)
 		else {
 			$document = new LibraryDocument();
 			$document->date = date('Y-m-d');
 			if (LibraryCategory::model()->findByAttributes(array('id' => $category_id)) == null) {
-				throw new CHttpException(404, Yii::t('LibraryModule.base', 'The category you want to create your document in could not be found!'));
+				throw new CHttpException(404, Yii::t('LibraryModule.exception', 'The category you want to create your document in could not be found!'));
 			}
 			if (($this->accessLevel == 1) && ($category->content->isPublic())) {
-				throw new CHttpException(404, Yii::t('LibraryModule.base', 'You miss the rights to add documents to public categories!'));
+				throw new CHttpException(404, Yii::t('LibraryModule.exception', 'You miss the rights to add documents to public categories!'));
 			}
 			$document->category_id = $category_id;
 			$isCreated = true;
 		}
-		
+
 		// if form content is sent back, validate and save
 		if (isset($_POST['LibraryDocument'])) {
 			$_POST = Yii::app()->input->stripClean($_POST);
@@ -405,31 +405,31 @@ class LibraryController extends ContentContainerController
 	 * @throws CHttpException 404, if the logged in User misses the rights to access this view.
 	 */
 	public function actionAddLink() {
-		
+
 		$this->checkContainerAccess();
-		
+
 		$category_id = (int) Yii::app()->request->getQuery('category_id');
 		$category = LibraryCategory::model()->findByAttributes(array('id' => $category_id));
 		$publicCategory = $category->content->isPublic();
 		$isCreated = false;
-		
+
 		// access level 0 may neither create nor edit
 		if($this->accessLevel == 0) {
-			throw new CHttpException(404, Yii::t('LibraryModule.base', 'You miss the rights to add links!'));
+			throw new CHttpException(404, Yii::t('LibraryModule.exception', 'You miss the rights to add links!'));
 		}
 		// access level 1 + 2 + 3 may create (level 1 only in non-public categories...)
 		else {
 			$link = new LibraryLink();
 			if (LibraryCategory::model()->findByAttributes(array('id' => $category_id)) == null) {
-				throw new CHttpException(404, Yii::t('LibraryModule.base', 'The category you want to create your link in could not be found!'));
+				throw new CHttpException(404, Yii::t('LibraryModule.exception', 'The category you want to create your link in could not be found!'));
 			}
 			if (($this->accessLevel == 1) && ($category->content->isPublic())) {
-				throw new CHttpException(404, Yii::t('LibraryModule.base', 'You miss the rights to add links to public categories!'));
+				throw new CHttpException(404, Yii::t('LibraryModule.exception', 'You miss the rights to add links to public categories!'));
 			}
 			$link->category_id = $category_id;
 			$isCreated = true;
 		}
-		
+
 		// if form content is sent back, validate and save
 		if (isset($_POST['LibraryLink'])) {
 			$_POST = Yii::app()->input->stripClean($_POST);
@@ -449,52 +449,52 @@ class LibraryController extends ContentContainerController
 		));
 	}
 
-	
+
 	/**
 	 * Action that deletes a given document.<br />
 	 * The request has to provide the id of the document to delete in the url parameter 'document_id'.
 	 * @throws CHttpException 404, if the logged in User misses the rights to access this view.
 	 */
 	public function actionDeleteItem() {
-		
+
 		$this->checkContainerAccess();
-		
+
 		$item_id = (int) Yii::app()->request->getQuery('item_id');
 		$item = LibraryItem::model()->findByAttributes(array('id' => $item_id));
-		
+
 		if ($item == null) {
-			throw new CHttpException(404, Yii::t('LibraryModule.base', 'Requested item could not be found.'));
+			throw new CHttpException(404, Yii::t('LibraryModule.exception', 'Requested item could not be found.'));
 		}
 		// access level 1 may delete own documents, 2 and 3 all documents
 		else if($this->accessLevel == 0 || $this->accessLevel == 1 && $item->content->created_by != Yii::app()->user->id) {
-			throw new CHttpException(404, Yii::t('LibraryModule.base', 'You miss the rights to delete this item!'));
-		}	
-	
+			throw new CHttpException(404, Yii::t('LibraryModule.exception', 'You miss the rights to delete this item!'));
+		}
+
 		$item->delete();
-	
+
 		$this->redirect(Yii::app()->createUrl('library/library/showlibrary', array ($this->guidParamName => $this->contentContainer->guid)));
 	}
-	
+
 	/**
 	 * Space Configuration Action for Admins
 	 */
 	public function actionConfig() {
-		 
+
 		Yii::import('library.forms.*');
 		$this->subLayout = $this->getConfigSubLayout();
-		
+
 		$form = new LibraryConfigureForm();
-	
+
 // 		uncomment the following code to enable ajax-based validation
         if (isset($_POST['ajax']) && $_POST['ajax'] === 'library-configure-form') {
             echo CActiveForm::validate($form);
             Yii::app()->end();
         }
-	
+
 		if (isset($_POST['LibraryConfigureForm'])) {
 			$_POST['LibraryConfigureForm'] = Yii::app()->input->stripClean($_POST['LibraryConfigureForm']);
 			$form->attributes = $_POST['LibraryConfigureForm'];
-	
+
 			if ($form->validate()) {
 				$this->contentContainer->setSetting('enableDeadLinkValidation', $form->enableDeadLinkValidation, 'library');
 				$this->contentContainer->setSetting('publishersOnly', $form->publishersOnly, 'library');
@@ -506,10 +506,10 @@ class LibraryController extends ContentContainerController
 			$form->publishersOnly = $this->contentContainer->getSetting('publishersOnly', 'library');
 			$form->enableWidget = $this->contentContainer->getSetting('enableWidget', 'library');
 		}
-	
+
 		$this->render('config', array('model' => $form, $this->guidParamName => $this->contentContainer->guid));
 	}
-	
+
 	/**
 	 * Reorder Items action.
 	 * @uses behaviors.ReorderContentBehavior
@@ -519,7 +519,7 @@ class LibraryController extends ContentContainerController
 		try {
 			$this->checkContainerAccess();
 			if (($this->accessLevel != 2) && ($this->accessLevel != 3)) {
-				throw new CHttpException(403, Yii::t('LibraryModule.base', 'You miss the rights to reorder items.!'));
+				throw new CHttpException(403, Yii::t('LibraryModule.exception', 'You miss the rights to reorder items!'));
 			}
 		} catch (CHttpException $e) {
 			echo json_encode($this->reorderContent('LibraryItem', $e->statusCode, $e->getMessage()));
@@ -528,7 +528,7 @@ class LibraryController extends ContentContainerController
 		// generate json response
 		echo json_encode($this->reorderContent('LibraryItem', 200, 'The item order was successfully changed.'));
 	}
-	
+
 	/**
 	 * Reorder Categories action.
 	 * @uses behaviors.ReorderContentBehavior
@@ -538,7 +538,7 @@ class LibraryController extends ContentContainerController
 		try {
 			$this->checkContainerAccess();
 			if ($this->accessLevel != 2) {
-				throw new CHttpException(403, Yii::t('LibraryModule.base', 'You miss the rights to reorder categories.!'));
+				throw new CHttpException(403, Yii::t('LibraryModule.exception', 'You miss the rights to reorder categories!'));
 			}
 		} catch (CHttpException $e) {
 			echo json_encode($this->reorderContent('LibraryCategory', $e->statusCode, $e->getMessage()));

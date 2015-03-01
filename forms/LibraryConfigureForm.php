@@ -31,9 +31,9 @@ class LibraryConfigureForm extends CFormModel {
      */
     public function attributeLabels() {
         return array(
-            'enableDeadLinkValidation' => Yii::t('LibraryModule.base', 'Extend link validation by a connection test.'),
-            'enableWidget' => Yii::t('LibraryModule.base', 'Show selected library categories in a sidebar widget.'),
-            'publishersOnly' => Yii::t('LibraryModule.base', 'Only publishers/admins can add items to any category.'),
+            'enableDeadLinkValidation' => Yii::t('LibraryModule.admin', 'Extend link validation by a connection test.'),
+            'enableWidget' => Yii::t('LibraryModule.admin', 'Show selected library categories in a sidebar widget.'),
+            'publishersOnly' => Yii::t('LibraryModule.admin', 'Only publishers/admins can add items to any category.'),
         );
     }
 

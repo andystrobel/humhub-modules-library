@@ -32,10 +32,10 @@ class LibraryAdminForm extends CFormModel {
      */
     public function attributeLabels() {
         return array(
-            'globalPublicLibrary' => Yii::t('LibraryModule.base', 'Global public library'),
-            'disclaimerWidget' => Yii::t('LibraryModule.base', 'Disclaimer widget'),
-            'disclaimerTitle' => Yii::t('LibraryModule.base', 'Disclaimer title'),
-            'disclaimerContent' => Yii::t('LibraryModule.base', 'Disclaimer content'),
+            'globalPublicLibrary' => Yii::t('LibraryModule.admin', 'Global public library'),
+            'disclaimerWidget' => Yii::t('LibraryModule.admin', 'Disclaimer widget'),
+            'disclaimerTitle' => Yii::t('LibraryModule.admin', 'Disclaimer title'),
+            'disclaimerContent' => Yii::t('LibraryModule.admin', 'Disclaimer content'),
         );
     }
 

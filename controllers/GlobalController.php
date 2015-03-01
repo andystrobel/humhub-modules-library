@@ -18,7 +18,7 @@ class GlobalController extends Controller
 			)
 		);
 	}
-	
+
 	/**
 	 * @return array action filters
 	 */
@@ -27,7 +27,7 @@ class GlobalController extends Controller
 			'accessControl', // perform access control for CRUD operations -> redirect to login if access denied
 		);
 	}
-	
+
 	/**
 	 * Specifies the access control rules.
 	 * This method is used by the 'accessControl' filter.
@@ -43,7 +43,7 @@ class GlobalController extends Controller
 			),
 		);
 	}
-	
+
 	/**
 	 * Init expanding parent init with custom initializations
 	 *
@@ -84,11 +84,18 @@ class GlobalController extends Controller
 	 */
 	public function actionIndex() {
 	    // Redirect to public library with lowest ID.
-	    $pubLib = array_keys($this->publicLibraries);
-	    $id = min($pubLib);
-	    $this->redirect(Yii::app()->createUrl('library/global/showLibrary',array('id' => $id)));
+	    if (count ($this->publicLibraries) > 0) {
+        $pubLib = array_keys($this->publicLibraries);
+  	    $id = min($pubLib);
+  	    $this->redirect(Yii::app()->createUrl('library/global/showLibrary',array('id' => $id)));
+      }
+      else {
+        $this->render('showLibrary', array(
+          'categories' => array()
+        ));
+      }
 	}
-	
+
 	/**
 	 * Action that renders the list view.
 	 * @see views/global/showLibrary.php
@@ -96,12 +103,12 @@ class GlobalController extends Controller
 	public function actionShowLibrary() {
 		$this->currentLibrary = (int) Yii::app()->request->getQuery('id');
 		$contentContainer = Space::model()->findByPk($this->currentLibrary);
-		
+
 		$categoryBuffer = LibraryCategory::model()->contentContainer($contentContainer)->findAll(array('order' => 'sort_order ASC'));
-		
+
 		$categories = array();
 		$items = array();
-			
+
 		foreach($categoryBuffer as $category) {
 			// only show public categories
 			if ($category->content->attributes['visibility'] == 1) {
@@ -114,7 +121,7 @@ class GlobalController extends Controller
 			'items' => $items,
 		));
 	}
-	
+
 }
 
 ?>

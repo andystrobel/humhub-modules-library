@@ -8,10 +8,9 @@
  * @author Matthias Wolf
  */
 ?>
-
         <div id="library-empty-txt" <?php if (empty($categories)) {
             echo 'style="visibility:visible; display:block"';
-        } ?>><?php echo Yii::t('LibraryModule.base', 'There have been no public categories added to this space yet.') ?> <i class="fa fa-frown-o"></i></div>
+        } ?>><?php echo Yii::t('LibraryModule.base', 'No public categories have been added to any space library yet.') ?> <i class="fa fa-frown-o"></i></div>
 
         <div class="library-categories">
             <?php foreach ($categories as $category) { ?>
