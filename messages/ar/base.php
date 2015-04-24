@@ -63,7 +63,7 @@ return array (
   'Link' => 'وصلة',
   'No public categories have been added to any space library yet.' => 'لم يتم إضافة اي قسم للمكتبة العامة لأي باحه بعد.',
   'Only publishers/admins can add items to any category.' => 'فقط الناشرون و المشرفون يستطيعون رفع الملفات لأي قسم.',
-  'Quick' => 'اختصار',
+  'Quick' => 'مختصر',
   'Save' => 'حفظ',
   'Set a custom disclaimer text or disable the disclaimer widget in the library module configuration.' => 'أكتب رسالة إخلاء مسؤولية او قم بإلغاء عرض ودجت رسالة إخلاء المسؤولية من إعدادات موديول المكتبة العامة.',
   'Show disclaimer widget in global public library.' => 'عرض خانة إخلاء المسؤولية في المكتبة العامة.',
@@ -78,5 +78,5 @@ return array (
   'URL' => 'عنوان الموقع',
   'You can configure extended functionality of this module for a space or user.' => 'يمكنك تغيير إعدادات إضافية لهذا الموديول لباحة او عضو محدد.',
   'You must upload a file.' => 'يجب أن تختار ملفاً لرفعه',
-  'library' => 'مكتبة',
+  'library' => 'المكتبة',
 );
